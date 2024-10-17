@@ -11,7 +11,7 @@ This backend project uses:
 2. Make sure to have NodeJs on your local environment (LTS version is recommended)
 3. Open a terminal inside the project and execute `npm install`
 4. Execute `npx cypress open` to open cypress
-5. Execute `npx cypress run` to run all tests in headless mode
+5. Execute `npx cypress run` to run all tests in headless mode, the report will be generated at `cypress/reports` once the run is completed
 
 ## How to run tests
 
