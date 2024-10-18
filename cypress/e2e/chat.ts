@@ -1,5 +1,6 @@
-import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import 'cypress-mochawesome-reporter/cucumberSupport';
+import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
+import { chatPage, loginPage } from '../pages'
 
 let messageSent = "";
 
@@ -8,41 +9,47 @@ Given("I visit Chat App", () => {
 });
 
 When("I login as {string} with password {string}", (username: string, password: string) => {
-  cy.get('[test-id="username"]').type(
-    username
-  );
-  cy.get('[test-id="password"]').type(
-    password
-  );
-  cy.get('[test-id="login-button"]').click();
+  loginPage.login(username, password);
 });
 
 Then("I see the title {string}", (title: string) => {
-  cy.get('[test-id="title"]').should('have.text', title)
+  chatPage.verifyTitle(title);
 });
 
-Then("I see error message {string}", (title: string) => {
-  cy.get('[test-id="error-message"]').should('have.text', title)
+Then("I see error message {string}", (message: string) => {
+  loginPage.verifyLoginMessage(message);
 });
 
 When("I select user {string} to chat", (username: string) => {
-  cy.get(`.chat-user[test-id="${username}"] a`).click();
+  chatPage.openUser(username);
 });
 
 When("I send message {string}", (message: string) => {
-  messageSent = `${message}-${new Date().toISOString()}`
-  cy.get('[test-id="message"]').type(messageSent);
-  cy.get('[test-id="send-button"]').click();
+  messageSent = chatPage.sendMessage(message);
 });
 
 Then("I see the message sent", () => {
-  cy.contains('.message', messageSent);
+  chatPage.verifyMessage(messageSent);
 });
 
 When("I go back", () => {
-  cy.get('[test-id="back-button"]').click();
+  chatPage.goBack();
 });
 
 When("I logout", () => {
-  cy.get('[test-id="logout-button"]').click();
+  chatPage.logout();
 });
+
+When("I wait 5 seconds in chat room", () => {
+  cy.wait(6000);
+});
+
+When("I send a long message", (longMessage: string) => {
+  chatPage.sendMessage(longMessage);
+});
+
+When("I send {int} messages", (times:number, message: string) => {
+  for (let i = 0; i < times; i++) {
+    chatPage.sendMessage(`${message}-Automated message ${i + 1}`);
+  }
+})
