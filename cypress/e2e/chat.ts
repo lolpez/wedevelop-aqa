@@ -45,7 +45,7 @@ When("I wait 5 seconds in chat room", () => {
 });
 
 When("I send a long message", (longMessage: string) => {
-  chatPage.sendMessage(longMessage);
+  messageSent = chatPage.sendMessage(longMessage);
 });
 
 When("I send {int} messages", (times:number, message: string) => {
